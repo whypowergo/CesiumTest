@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8" />
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <title>全球大气环境监测系统</title>
+    <script src="./Lib/jQuery3.5.1.js"></script>
+    <script src="./Build/Cesium/Cesium.js"></script>
+    <!-- <script src="./js/AOD.js"></script> -->
+    <!-- <script src="./js/Aerosol.js"></script> -->
+    <style>
+      @import url(./Build/Cesium/Widgets/widgets.css);
+      html,
+      body,
+      #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        
+      }
+      
+
+    </style>
+  </head>
+
+
+  <body>
+    
+    <div id="cesiumContainer">
+
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+      Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4ZDRhNzE4Mi01ZTk2LTRkNjEtOTM1Yy1iZWU5YzRmNWEyMmMiLCJpZCI6NDM2MTYsImlhdCI6MTYxMjg3MDg5N30.hgCIuGqPxIubD0-7MqlekznI-uPgrZlqnmmwbzLL-rs'
+
+      //天地图WMTS服务provider定义
+      var tiandituProvider = new Cesium.WebMapTileServiceImageryProvider({
+        url : 'http://t0.tianditu.gov.cn/img_w/wmts?tk=d6c3bcbcb12ebbf0fdc4733d8e496152',
+        layer : 'img',
+        style : 'default',
+        format : 'tiles',
+        tileMatrixSetID : 'w',
+        credit : new Cesium.Credit('来自天地图的亲切问候~'),
+        //subdomains :['t0','t1','t2','t3','t4','t5','t6','t7'],
+        maximumLevel : 18,
+      });
+      //天地图ProviderModel封装
+      var tiandituModel = new Cesium.ProviderViewModel({
+        name : '天地图',
+        iconUrl :'./image/tian.ico',
+        tooltip : '别看了，就选我',
+        //_category:'国内影像服务',
+        creationFunction : function(){
+          return tiandituProvider;
+        },
+      });
+
+
+
+      //viewer定义
+      var viewer = new Cesium.Viewer("cesiumContainer",{
+        navigationHelpButton:false,
+        //terrainProvider:terrainProvider,
+        terrainExaggeration:2.0,
+        baseLayerPicker : true,
+      });
+
+      var providerViewModels = [];
+      providerViewModels.push(tiandituModel);
+      viewer.baseLayerPicker.viewModel.imageryProviderViewModels = providerViewModels;
+      //viewer.baseLayerPicker.viewModel.terrainProviderViewModels = [];
+
+
+      //控件定义
+      viewer._cesiumWidget._creditContainer.style.display="none";//隐藏credit
+      viewer.scene.debugShowFramesPerSecond =true;//显示帧率
+
+
+  
+    </script>
+  </body>
+
+
+
+</html>
